@@ -688,6 +688,52 @@ configPanel.appendChild(createSwitch('numUC', 'Nº UC', true));
 
 document.body.appendChild(configPanel);
 
+// Adiciona switch "Ativar/Desativar Tudo" no topo do painel
+var toggleAllContainer = document.createElement('div');
+toggleAllContainer.className = 'switch-container';
+toggleAllContainer.style.marginBottom = '15px';
+toggleAllContainer.style.borderBottom = '1px solid #ccc';
+toggleAllContainer.style.paddingBottom = '10px';
+
+var toggleAllLabel = document.createElement('span');
+toggleAllLabel.className = 'switch-label';
+toggleAllLabel.textContent = 'Ativar/Desativar Tudo';
+toggleAllLabel.style.fontWeight = 'bold';
+
+var toggleAllSwitch = document.createElement('label');
+toggleAllSwitch.className = 'switch';
+toggleAllSwitch.innerHTML = `
+    <input type="checkbox" id="toggleAll" checked>
+    <span class="slider"></span>
+`;
+
+// Insere no início do painel
+configPanel.insertBefore(toggleAllContainer, configPanel.firstChild.nextSibling);
+toggleAllContainer.appendChild(toggleAllLabel);
+toggleAllContainer.appendChild(toggleAllSwitch);
+
+// Adiciona funcionalidade ao switch "Ativar/Desativar Tudo"
+document.getElementById('toggleAll').addEventListener('change', function() {
+    const isChecked = this.checked;
+    const switches = configPanel.querySelectorAll('input[type="checkbox"]:not(#toggleAll)');
+    switches.forEach(switchElement => {
+        switchElement.checked = isChecked;
+        const id = switchElement.id;
+        camposConfig[id] = isChecked;
+    });
+});
+
+// Adiciona estilo CSS para o switch "Ativar/Desativar Tudo"
+var toggleAllStyle = document.createElement('style');
+toggleAllStyle.innerHTML = `
+#toggleAll + .slider {
+    background-color: #2196F3;
+}
+#toggleAll:checked + .slider {
+    background-color: #2196F3;
+}
+`;
+document.head.appendChild(toggleAllStyle);
 
 //Iframe
 var ifrIframe1 = document.createElement("iframe");
