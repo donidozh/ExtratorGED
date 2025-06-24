@@ -1,14 +1,19 @@
+alanise esse codfigo
+
 // ==UserScript==
 // @name          Extrator Contatos Sigeduca
 // @version       2.5.3
-// @description   Consulta e salva dados de contato dos alunos do sigeduca, com filtro de dados.
+// @description   Consulta e salva dados de contato dos alunos do sigeduca.
 // @author        Roberson Arruda
 // @homepage      https://github.com/donidozh/ExtratorGED/blob/main/ExtratorGED.user.js
-// @match         https://*.seduc.mt.gov.br/ged/hwmconaluno.aspx*
-// @match         http://*.seduc.mt.gov.br/ged/hwmconaluno.aspx*
-// @copyright     2019, Roberson Arruda
+// @downloadURL   https://raw.githubusercontent.com/donidozh/ExtratorGED/main/ExtratorGED.user.js
+// @updateURL     https://raw.githubusercontent.com/donidozh/ExtratorGED/main/ExtratorGED.user.js
+// @match	      https://*.seduc.mt.gov.br/ged/hwmconaluno.aspx*
+// @match	      http://*.seduc.mt.gov.br/ged/hwmconaluno.aspx*
+// @copyright     2019, Roberson Arruda (robersonarruda@outlook.com)
 // @grant         none
 // ==/UserScript==
+
 /*
 ...Não existe só um caminho. Dê a volta e encontre outro!
 */
@@ -81,7 +86,6 @@ styleSCT.innerHTML = `
   width: 152px;
   text-decoration: none;
   text-shadow: 1px 1px 0px #100d29;
-  margin: 2px;
 }
 .botaoSCT:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #3255c7), color-stop(1, #4e88ed));
@@ -98,104 +102,7 @@ styleSCT.innerHTML = `
   -webkit-border-radius: 4px;
   border-radius: 4px;
   border: 1px solid #102b4d;
-}
-
-/* Novo CSS para o painel de seleção */
-.config-panel {
-  position: fixed;
-  right: 420px;
-  bottom: 24px;
-  width: 300px;
-  background: #f0f0f0;
-  border: 1px solid #102b4d;
-  border-radius: 4px;
-  padding: 10px;
-  z-index: 2001;
-  display: none;
-  height: 400px;
-  overflow-y: auto;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.config-panel h3 {
-  margin-top: 0;
-  text-align: center;
-  color: #3255c7;
-}
-
-.config-toggle {
-  position: fixed;
-  right: 410px;
-  bottom: 30px;
-  z-index: 2003;
-  background: #4e88ed;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.switch-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 8px 0;
-  padding: 5px;
-  background: #e0e0e0;
-  border-radius: 4px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 24px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #4e88ed;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.switch-label {
-  font-size: 13px;
-  color: #333;
-}
-`;
+}`;
 document.getElementsByTagName('head')[0].appendChild(styleSCT);
 
 
@@ -210,60 +117,6 @@ var a = "";
 var cabecalho="";
 var nomealuno="";
 var grupoSocial = "";
-
-// Configuração de campos (todos inicialmente ativos)
-var camposConfig = {
-  codAluno: true,
-  inep: true,
-  nome: true,
-  cpf: true,
-  raca: true,
-  grupoSocial: true,
-  rg: true,
-  orgaoExpedidor: true,
-  sexo: true,
-  dataNascimento: true,
-  naturalidade: true,
-  ufNaturalidade: true,
-  filiacao1: true,
-  filiacao2: true,
-  responsavel1: true,
-  cpfResponsavel1: true,
-  telResResp1: true,
-  telCelResp1: true,
-  telComResp1: true,
-  telContatoResp1: true,
-  emailResp1: true,
-  responsavel2: true,
-  cpfResponsavel2: true,
-  telResResp2: true,
-  telCelResp2: true,
-  telComResp2: true,
-  telContatoResp2: true,
-  emailResp2: true,
-  telResidencial: true,
-  telCelular: true,
-  telComercial: true,
-  telContato: true,
-  endereco: true,
-  numero: true,
-  complemento: true,
-  bairro: true,
-  cidade: true,
-  uf: true,
-  cep: true,
-  uc: true,
-  numUC: true
-};
-
-function toggleConfigPanel() {
-  const panel = document.getElementById('configPanel');
-  if (panel.style.display === 'block') {
-    panel.style.display = 'none';
-  } else {
-    panel.style.display = 'block';
-  }
-}
 
 //FUNÇÃO SALVAR CONTEÚDO EM CSV
 function saveTextAsFile() {
@@ -305,82 +158,109 @@ function coletar(opcao)
 //Extrai dados da ABA "PESSOAL"
 function coletaDados1() {
     if(n < vetAluno.length){
+
         //VERIFICAR GRUPO SOCIAL ASSINALADO E GUARDAR NA VARIÁVEL grupoSocial
+        // Percorre todos os elementos de input com o name="CTLGERPESGRPSOC" (Grupo Social)
         let radios = parent.frames[0].document.querySelectorAll('input[name="CTLGERPESGRPSOC"]');
+        // Para cada input radio
         radios.forEach(function(radio) {
+            // Verifica se o radio está selecionado (checked)
             if (radio.checked) {
+                // Verifica o value e atribui o valor adequado à variável grupoSocial
                 switch (radio.value) {
-                    case "N": grupoSocial = "Não declarado"; break;
-                    case "I": grupoSocial = "Circense"; break;
-                    case "T": grupoSocial = "Trabalhador Itinerante"; break;
-                    case "C": grupoSocial = "Acampados"; break;
-                    case "A": grupoSocial = "Artista"; break;
-                    case "P": grupoSocial = "Povos Indígenas"; break;
-                    case "Q": grupoSocial = "Povos Quilombolas"; break;
-                    default: grupoSocial = "";
+                    case "N":
+                        grupoSocial = "Não declarado";
+                        break;
+                    case "I":
+                        grupoSocial = "Circense";
+                        break;
+                    case "T":
+                        grupoSocial = "Trabalhador Itinerante";
+                        break;
+                    case "C":
+                        grupoSocial = "Acampados";
+                        break;
+                    case "A":
+                        grupoSocial = "Artista";
+                        break;
+                    case "P":
+                        grupoSocial = "Povos Indígenas";
+                        break;
+                    case "Q":
+                        grupoSocial = "Povos Quilombolas";
+                        break;
+                    default:
+                        grupoSocial = ""; // Caso o value não seja nenhum dos listados
                 }
             }
         });
 
-        // Resetar cabeçalho e dados
-        a = "";
-        cabecalho = "";
-        
-        // Dados gerais do Aluno - agora verificando configurações
-        if (camposConfig.codAluno) { a += vetAluno[n] + ";"; cabecalho += "Cod Aluno;"; }
-        if (camposConfig.inep) { a += parent.frames[0].document.getElementById('span_CTLGEDALUIDINEP').innerHTML + ";"; cabecalho += "Nº INEP;"; }
-        if (camposConfig.nome) { a += parent.frames[0].document.getElementById('span_CTLGERPESNOM').innerHTML + ";"; cabecalho += "Aluno;"; }
-        if (camposConfig.cpf) { a += parent.frames[0].document.getElementById('span_CTLGERPESCPF').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4") + ";"; cabecalho += "CPF do Aluno;"; }
-        if (camposConfig.raca) { a += parent.frames[0].document.getElementById('span_CTLGERPESRACA').innerHTML + ";"; cabecalho += "Cor ou Raça;"; }
-        if (camposConfig.grupoSocial) { a += grupoSocial + ";"; cabecalho += "Grupo Social;"; }
-        if (camposConfig.rg) { a += parent.frames[0].document.getElementById('span_CTLGERPESRG').innerHTML + ";"; cabecalho += "RG do aluno;"; }
-        if (camposConfig.orgaoExpedidor) { a += parent.frames[0].document.getElementById('span_CTLGERORGEMICOD').innerHTML + ";"; cabecalho += "Órgão Expedidor;"; }
-        if (camposConfig.sexo) { a += parent.frames[0].document.getElementById('span_CTLGERPESSEXO').innerHTML + ";"; cabecalho += "Sexo do Aluno;"; }
-        if (camposConfig.dataNascimento) { a += parent.frames[0].document.getElementById('span_CTLGERPESDTANASC').innerHTML + ";"; cabecalho += "Data de Nascimento;"; }
-        if (camposConfig.naturalidade) { a += parent.frames[0].document.getElementById('span_CTLGERPESNATDSC').innerHTML + ";"; cabecalho += "Naturalidade;"; }
-        if (camposConfig.ufNaturalidade) { a += parent.frames[0].document.getElementById('span_CTLGERPESNATUF').innerHTML + ";"; cabecalho += "UF;"; }
-        if (camposConfig.filiacao1) { a += parent.frames[0].document.getElementById('span_CTLGERPESNOMMAE').innerHTML + ";"; cabecalho += "Filiação 1;"; }
-        if (camposConfig.filiacao2) { a += parent.frames[0].document.getElementById('span_CTLGERPESNOMPAI').innerHTML + ";"; cabecalho += "filiação 2;"; }
+        //Dados gerais do Aluno
+        a = a + vetAluno[n] +";"; cabecalho = "Cod Aluno;"; //Cod Aluno
+        a = a + parent.frames[0].document.getElementById('span_CTLGEDALUIDINEP').innerHTML +";"; cabecalho = cabecalho+"Nº INEP;"; //Matrícula INEP
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNOM').innerHTML +";"; cabecalho = cabecalho+"Aluno;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESCPF').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4") +";"; cabecalho = cabecalho+"CPF do Aluno;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESRACA').innerHTML +";"; cabecalho = cabecalho+"Cor ou Raça;";
+        a = a + grupoSocial+";"; cabecalho = cabecalho+"Grupo Social;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESRG').innerHTML +";"; cabecalho = cabecalho+"RG do aluno;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERORGEMICOD').innerHTML +";"; cabecalho = cabecalho+"Órgão Expedidor;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESSEXO').innerHTML +";"; cabecalho = cabecalho+"Sexo do Aluno;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESDTANASC').innerHTML +";"; cabecalho = cabecalho+"Data de Nascimento;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNATDSC').innerHTML +";"; cabecalho = cabecalho+"Naturalidade;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNATUF').innerHTML +";"; cabecalho = cabecalho+"UF;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNOMMAE').innerHTML +";"; cabecalho = cabecalho+"Filiação 1;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNOMPAI').innerHTML +";"; cabecalho = cabecalho+"filiação 2;";
 
-        // Contatos responsável 1
-        if (camposConfig.responsavel1) { a += parent.frames[0].document.getElementById('span_CTLGERPESNOMRESP').innerHTML + ";"; cabecalho += "Nome do responsável 1;"; }
-        if (camposConfig.cpfResponsavel1) { a += parent.frames[0].document.getElementById('span_CTLGERPESRESPCPF').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4") + ";"; cabecalho += "CPF do responsável 1;"; }
-        if (camposConfig.telResResp1) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELRESDDDRESP').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELRESRESP').innerHTML + ";"; cabecalho += "Tel Res Resp 1;"; }
-        if (camposConfig.telCelResp1) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCELDDDRESP').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCELRESP').innerHTML + ";"; cabecalho += "Tel Celular Resp 1;"; }
-        if (camposConfig.telComResp1) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCOMDDDRESP').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCOMRESP').innerHTML + ";"; cabecalho += "Tel Comercial Resp 1;"; }
-        if (camposConfig.telContatoResp1) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCONDDDRESP').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCONRESP').innerHTML + ";"; cabecalho += "Tel Contato Resp 1;"; }
-        if (camposConfig.emailResp1) { a += parent.frames[0].document.getElementById('span_CTLGERPESEMAILRESP').innerHTML + ";"; cabecalho += "E-mail Resp 1;"; }
+        //Contatos responsável 1
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNOMRESP').innerHTML+";"; cabecalho = cabecalho+"Nome do responsável 1;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESRESPCPF').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4")+";"; cabecalho = cabecalho+"CPF do responsável 1;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELRESDDDRESP').innerHTML+")"; //DDD Residencial
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELRESRESP').innerHTML+";"; cabecalho = cabecalho+"Tel Res Resp 1;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCELDDDRESP').innerHTML+")"; //DDD Celular
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCELRESP').innerHTML+";"; cabecalho = cabecalho+"Tel Celular Resp 1;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCOMDDDRESP').innerHTML+")"; //DDD Comercial
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCOMRESP').innerHTML+";"; cabecalho = cabecalho+"Tel Comercial Resp 1;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCONDDDRESP').innerHTML+")"; //DDD Contato
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCONRESP').innerHTML+";"; cabecalho = cabecalho+"Tel Contato Resp 1;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESEMAILRESP').innerHTML+";"; cabecalho = cabecalho+"E-mail Resp 1;";
 
-        // Contatos responsável 2
-        if (camposConfig.responsavel2) { a += parent.frames[0].document.getElementById('span_CTLGERPESNOMRESP2').innerHTML + ";"; cabecalho += "Nome do responsável 2;"; }
-        if (camposConfig.cpfResponsavel2) { a += parent.frames[0].document.getElementById('span_CTLGERPESRESPCPF2').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4") + ";"; cabecalho += "CPF do responsável 2;"; }
-        if (camposConfig.telResResp2) { a += "(" + parent.frames[0].document.getElementById('CTLGERPESTELRESDDDRESP2').innerHTML + ")" + parent.frames[0].document.getElementById('CTLGERPESTELRESRESP2').innerHTML + ";"; cabecalho += "Tel Res Resp 2;"; }
-        if (camposConfig.telCelResp2) { a += "(" + parent.frames[0].document.getElementById('CTLGERPESTELCELDDDRESP2').innerHTML + ")" + parent.frames[0].document.getElementById('CTLGERPESTELCELRESP2').innerHTML + ";"; cabecalho += "Tel Celular Resp 2;"; }
-        if (camposConfig.telComResp2) { a += "(" + parent.frames[0].document.getElementById('CTLGERPESTELCOMDDDRESP2').innerHTML + ")" + parent.frames[0].document.getElementById('CTLGERPESTELCOMRESP2').innerHTML + ";"; cabecalho += "Tel Comercial Resp 2;"; }
-        if (camposConfig.telContatoResp2) { a += "(" + parent.frames[0].document.getElementById('CTLGERPESTELCONDDDRESP2').innerHTML + ")" + parent.frames[0].document.getElementById('CTLGERPESTELCONRESP2').innerHTML + ";"; cabecalho += "Tel Contato Resp 2;"; }
-        if (camposConfig.emailResp2) { a += parent.frames[0].document.getElementById('CTLGERPESEMAILRESP2').innerHTML + ";"; cabecalho += "E-mail Resp 2;"; }
+        //Contatos responsável 2
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNOMRESP2').innerHTML+";"; cabecalho = cabecalho+"Nome do responsável 2;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESRESPCPF2').innerHTML.replace(/^([\d]{3})([\d]{3})([\d]{3})([\d]{2})$/, "$1.$2.$3-$4")+";"; cabecalho = cabecalho+"CPF do responsável 2;";
+        a = a + "("+parent.frames[0].document.getElementById('CTLGERPESTELRESDDDRESP2').innerHTML+")"; //DDD Residencial
+        a = a + parent.frames[0].document.getElementById('CTLGERPESTELRESRESP2').innerHTML+";"; cabecalho = cabecalho+"Tel Res Resp 2;";
+        a = a + "("+parent.frames[0].document.getElementById('CTLGERPESTELCELDDDRESP2').innerHTML+")"; //DDD Celular
+        a = a + parent.frames[0].document.getElementById('CTLGERPESTELCELRESP2').innerHTML+";"; cabecalho = cabecalho+"Tel Celular Resp 2;";
+        a = a + "("+parent.frames[0].document.getElementById('CTLGERPESTELCOMDDDRESP2').innerHTML+")"; //DDD Comercial
+        a = a + parent.frames[0].document.getElementById('CTLGERPESTELCOMRESP2').innerHTML+";"; cabecalho = cabecalho+"Tel Comercial Resp 2;";
+        a = a + "("+parent.frames[0].document.getElementById('CTLGERPESTELCONDDDRESP2').innerHTML+")"; //DDD Contato
+        a = a + parent.frames[0].document.getElementById('CTLGERPESTELCONRESP2').innerHTML+";"; cabecalho = cabecalho+"Tel Contato Resp 2;";
+        a = a + parent.frames[0].document.getElementById('CTLGERPESEMAILRESP2').innerHTML+";"; cabecalho = cabecalho+"E-mail Resp 2;";
 
-        // Contato da seção final da página (ENDEREÇO)
-        if (camposConfig.telResidencial) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELRESDDD').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELRES').innerHTML + ";"; cabecalho += "Tel Residencial;"; }
-        if (camposConfig.telCelular) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCELDDD').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCEL').innerHTML + ";"; cabecalho += "Tel Celular;"; }
-        if (camposConfig.telComercial) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCOMDDD').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCOM').innerHTML + ";"; cabecalho += "Tel Comercial;"; }
-        if (camposConfig.telContato) { a += "(" + parent.frames[0].document.getElementById('span_CTLGERPESTELCONDDD').innerHTML + ")" + parent.frames[0].document.getElementById('span_CTLGERPESTELCON').innerHTML + ";"; cabecalho += "Tel Contato;"; }
+        //Contato da seção final da página (ENDEREÇO)
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELRESDDD').innerHTML+")"; //DDD Residencial 2
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELRES').innerHTML+";"; cabecalho = cabecalho+"Tel Residencial;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCELDDD').innerHTML+")"; //DDD Celular 2
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCEL').innerHTML+";"; cabecalho = cabecalho+"Tel Celular;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCOMDDD').innerHTML+")"; //DDD Comercial 2
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCOM').innerHTML+";"; cabecalho = cabecalho+"Tel Comercial;";
+        a = a + "("+parent.frames[0].document.getElementById('span_CTLGERPESTELCONDDD').innerHTML+")"; //DDD Contato 2
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESTELCON').innerHTML+";"; cabecalho = cabecalho+"Tel Contato;";
 
-        // Endereço
-        if (camposConfig.endereco) { a += parent.frames[0].document.getElementById('span_CTLGERPESEND').innerHTML + ";"; cabecalho += "Endereço Rua;"; }
-        if (camposConfig.numero) { a += parent.frames[0].document.getElementById('span_CTLGERPESNMRLOG').innerHTML + ";"; cabecalho += "Número;"; }
-        if (camposConfig.complemento) { a += parent.frames[0].document.getElementById('span_CTLGERPESCMPLOG').innerHTML + ";"; cabecalho += "Complemento;"; }
-        if (camposConfig.bairro) { a += parent.frames[0].document.getElementById('span_CTLGERPESBAIRRO').innerHTML + ";"; cabecalho += "Bairro;"; }
-        if (camposConfig.cidade) { a += parent.frames[0].document.getElementById('span_CTLGERPESENDCIDDSC').innerHTML + ";"; cabecalho += "Cidade;"; }
-        if (camposConfig.uf) { a += parent.frames[0].document.getElementById('span_CTLGERPESENDUF').innerHTML + ";"; cabecalho += "UF;"; }
-        if (camposConfig.cep) { a += parent.frames[0].document.getElementById('span_CTLGERPESCEP').innerHTML + ";"; cabecalho += "CEP;"; }
-        if (camposConfig.uc) { a += parent.frames[0].document.getElementById('span_CTLGERPESDISTCOD').innerHTML + ";"; cabecalho += "UC (Distribuidora);"; }
-        if (camposConfig.numUC) { a += parent.frames[0].document.getElementById('span_CTLGERPESUC').innerHTML + ";"; cabecalho += "Nº UC;"; }
-        
-        a += "\n";
+        //Endereço
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESEND').innerHTML+";"; cabecalho = cabecalho+"Endereço Rua;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESNMRLOG').innerHTML+";"; cabecalho = cabecalho+"Número;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESCMPLOG').innerHTML+";"; cabecalho = cabecalho+"Complemento;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESBAIRRO').innerHTML+";"; cabecalho = cabecalho+"Bairro;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESENDCIDDSC').innerHTML+";"; cabecalho = cabecalho+"Cidade;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESENDUF').innerHTML+";"; cabecalho = cabecalho+"UF;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESCEP').innerHTML+";"; cabecalho = cabecalho+"CEP;";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESDISTCOD').innerHTML+";"; cabecalho = cabecalho+"UC (Distribuidora);";
+        a = a + parent.frames[0].document.getElementById('span_CTLGERPESUC').innerHTML+";"; cabecalho = cabecalho+"Nº UC;";
+        a = a + "\n";
 
-        txtareaDados.value = cabecalho + "\n" + a;
-        n = n + 1;
+        txtareaDados.value = cabecalho+"\n"+a;
+        n=n+1;
         if(n < vetAluno.length){
             ifrIframe1.src = "http://sigeduca.seduc.mt.gov.br/ged/hwtmgedaluno.aspx?"+vetAluno[n]+",,HWMConAluno,DSP,1,0";
         }
@@ -591,149 +471,6 @@ var divCredit = document.createElement('div');
     divCredit.setAttribute('class','menuSCT');
     divCredit.setAttribute('style','background: #DBDBDB; color: #000; width: 380px; text-align: center;font-weight: bold;position: fixed;z-index: 2002;padding: 5px 0px 0px 5px;bottom: 24px;right: 30px;height: 400px;');
 document.getElementsByTagName('body')[0].appendChild(divCredit);
-
-// Botão para abrir/fechar o painel de configuração
-var configToggleBtn = document.createElement('button');
-configToggleBtn.textContent = '⚙️ Configurar Filtros';
-configToggleBtn.className = 'config-toggle';
-configToggleBtn.onclick = toggleConfigPanel;
-document.body.appendChild(configToggleBtn);
-
-// Painel de configuração
-var configPanel = document.createElement('div');
-configPanel.id = 'configPanel';
-configPanel.className = 'config-panel';
-configPanel.innerHTML = '<h3>Selecionar Campos para Extração</h3>';
-
-// Função para criar um switch
-function createSwitch(id, label, initialState) {
-    const container = document.createElement('div');
-    container.className = 'switch-container';
-    
-    const labelElement = document.createElement('span');
-    labelElement.className = 'switch-label';
-    labelElement.textContent = label;
-    
-    const switchElement = document.createElement('label');
-    switchElement.className = 'switch';
-    switchElement.innerHTML = `
-        <input type="checkbox" id="${id}" ${initialState ? 'checked' : ''}>
-        <span class="slider"></span>
-    `;
-    
-    // Adiciona evento para atualizar a configuração
-    switchElement.querySelector('input').addEventListener('change', function() {
-        camposConfig[id] = this.checked;
-    });
-    
-    container.appendChild(labelElement);
-    container.appendChild(switchElement);
-    return container;
-}
-
-// Adiciona switches para cada campo
-configPanel.appendChild(createSwitch('codAluno', 'Código do Aluno', true));
-configPanel.appendChild(createSwitch('inep', 'Número INEP', true));
-configPanel.appendChild(createSwitch('nome', 'Nome do Aluno', true));
-configPanel.appendChild(createSwitch('cpf', 'CPF do Aluno', true));
-configPanel.appendChild(createSwitch('raca', 'Cor/Raça', true));
-configPanel.appendChild(createSwitch('grupoSocial', 'Grupo Social', true));
-configPanel.appendChild(createSwitch('rg', 'RG do Aluno', true));
-configPanel.appendChild(createSwitch('orgaoExpedidor', 'Órgão Expedidor', true));
-configPanel.appendChild(createSwitch('sexo', 'Sexo do Aluno', true));
-configPanel.appendChild(createSwitch('dataNascimento', 'Data de Nascimento', true));
-configPanel.appendChild(createSwitch('naturalidade', 'Naturalidade', true));
-configPanel.appendChild(createSwitch('ufNaturalidade', 'UF Naturalidade', true));
-configPanel.appendChild(createSwitch('filiacao1', 'Filiação 1 (Mãe)', true));
-configPanel.appendChild(createSwitch('filiacao2', 'Filiação 2 (Pai)', true));
-
-configPanel.appendChild(document.createElement('hr'));
-
-configPanel.appendChild(createSwitch('responsavel1', 'Responsável 1 - Nome', true));
-configPanel.appendChild(createSwitch('cpfResponsavel1', 'Responsável 1 - CPF', true));
-configPanel.appendChild(createSwitch('telResResp1', 'Responsável 1 - Tel Residencial', true));
-configPanel.appendChild(createSwitch('telCelResp1', 'Responsável 1 - Tel Celular', true));
-configPanel.appendChild(createSwitch('telComResp1', 'Responsável 1 - Tel Comercial', true));
-configPanel.appendChild(createSwitch('telContatoResp1', 'Responsável 1 - Tel Contato', true));
-configPanel.appendChild(createSwitch('emailResp1', 'Responsável 1 - E-mail', true));
-
-configPanel.appendChild(document.createElement('hr'));
-
-configPanel.appendChild(createSwitch('responsavel2', 'Responsável 2 - Nome', true));
-configPanel.appendChild(createSwitch('cpfResponsavel2', 'Responsável 2 - CPF', true));
-configPanel.appendChild(createSwitch('telResResp2', 'Responsável 2 - Tel Residencial', true));
-configPanel.appendChild(createSwitch('telCelResp2', 'Responsável 2 - Tel Celular', true));
-configPanel.appendChild(createSwitch('telComResp2', 'Responsável 2 - Tel Comercial', true));
-configPanel.appendChild(createSwitch('telContatoResp2', 'Responsável 2 - Tel Contato', true));
-configPanel.appendChild(createSwitch('emailResp2', 'Responsável 2 - E-mail', true));
-
-configPanel.appendChild(document.createElement('hr'));
-
-configPanel.appendChild(createSwitch('telResidencial', 'Tel Residencial', true));
-configPanel.appendChild(createSwitch('telCelular', 'Tel Celular', true));
-configPanel.appendChild(createSwitch('telComercial', 'Tel Comercial', true));
-configPanel.appendChild(createSwitch('telContato', 'Tel Contato', true));
-
-configPanel.appendChild(document.createElement('hr'));
-
-configPanel.appendChild(createSwitch('endereco', 'Endereço', true));
-configPanel.appendChild(createSwitch('numero', 'Número', true));
-configPanel.appendChild(createSwitch('complemento', 'Complemento', true));
-configPanel.appendChild(createSwitch('bairro', 'Bairro', true));
-configPanel.appendChild(createSwitch('cidade', 'Cidade', true));
-configPanel.appendChild(createSwitch('uf', 'UF', true));
-configPanel.appendChild(createSwitch('cep', 'CEP', true));
-configPanel.appendChild(createSwitch('uc', 'UC (Distribuidora)', true));
-configPanel.appendChild(createSwitch('numUC', 'Nº UC', true));
-
-document.body.appendChild(configPanel);
-
-// Adiciona switch "Ativar/Desativar Tudo" no topo do painel
-var toggleAllContainer = document.createElement('div');
-toggleAllContainer.className = 'switch-container';
-toggleAllContainer.style.marginBottom = '15px';
-toggleAllContainer.style.borderBottom = '1px solid #ccc';
-toggleAllContainer.style.paddingBottom = '10px';
-
-var toggleAllLabel = document.createElement('span');
-toggleAllLabel.className = 'switch-label';
-toggleAllLabel.textContent = 'Ativar/Desativar Tudo';
-toggleAllLabel.style.fontWeight = 'bold';
-
-var toggleAllSwitch = document.createElement('label');
-toggleAllSwitch.className = 'switch';
-toggleAllSwitch.innerHTML = `
-    <input type="checkbox" id="toggleAll" checked>
-    <span class="slider"></span>
-`;
-
-// Insere no início do painel
-configPanel.insertBefore(toggleAllContainer, configPanel.firstChild.nextSibling);
-toggleAllContainer.appendChild(toggleAllLabel);
-toggleAllContainer.appendChild(toggleAllSwitch);
-
-// Adiciona funcionalidade ao switch "Ativar/Desativar Tudo"
-document.getElementById('toggleAll').addEventListener('change', function() {
-    const isChecked = this.checked;
-    const switches = configPanel.querySelectorAll('input[type="checkbox"]:not(#toggleAll)');
-    switches.forEach(switchElement => {
-        switchElement.checked = isChecked;
-        const id = switchElement.id;
-        camposConfig[id] = isChecked;
-    });
-});
-
-// Adiciona estilo CSS para o switch "Ativar/Desativar Tudo"
-var toggleAllStyle = document.createElement('style');
-toggleAllStyle.innerHTML = `
-#toggleAll + .slider {
-    background-color: #2196F3;
-}
-#toggleAll:checked + .slider {
-    background-color: #2196F3;
-}
-`;
-document.head.appendChild(toggleAllStyle);
 
 //Iframe
 var ifrIframe1 = document.createElement("iframe");
