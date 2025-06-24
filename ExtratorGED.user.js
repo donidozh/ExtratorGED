@@ -1,5 +1,3 @@
-alanise esse codfigo
-
 // ==UserScript==
 // @name          Extrator Contatos Sigeduca
 // @version       2.5.3
